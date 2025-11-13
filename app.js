@@ -1,3 +1,10 @@
+// Helper to add items to history (max 10)
+// Uses ES6 destructuring, default params, template literals, spread
+function addToHistory(calc, expression, result, { max = 10 } = {}) {
+    const entry = `${expression} = ${result}`;
+    calc.history = [entry, ...calc.history].slice(0, max);
+}
+
 // Basic operations
 const ops = {
     "+": (a, b) => a + b,
@@ -13,7 +20,7 @@ function createCalculator() {
         operator: null,
         error: null,
         lastExpression: "",
-        history: [], // history будет использоваться позже
+        history: [],
 
         inputDigit(d) {
             if (this.error) this.error = null;
@@ -56,15 +63,17 @@ function createCalculator() {
 
             const a = this.operand;
             const b = parseFloat(this.current);
+            const op = this.operator;
 
-            const result = this._compute(a, b, this.operator);
+            const result = this._compute(a, b, op);
             if (result === null) return;
 
-            const expression = `${a} ${this.operator} ${b}`;
+            const expression = `${a} ${op} ${b}`;
 
             this.lastExpression = expression;
-            this.current = String(result);
+            addToHistory(this, expression, result);
 
+            this.current = String(result);
             this.operand = null;
             this.operator = null;
         },
@@ -125,18 +134,17 @@ function createCalculator() {
     };
 }
 
-// ---------- UI LAYER (новая часть) ----------
+// ---------- UI LAYER ----------
 
-// Находим элементы
+// DOM elements
 const displayEl = document.getElementById("display");
 const expressionEl = document.getElementById("expression");
 const errorEl = document.getElementById("error");
 const historyListEl = document.getElementById("history-list");
 
-// Создаем экземпляр калькулятора
+// Calculator instance
 const calc = createCalculator();
 
-// Рендер истории (пока просто очищаем, позже заполним)
 function renderHistory() {
     historyListEl.innerHTML = "";
     calc.history.forEach((item) => {
@@ -146,7 +154,6 @@ function renderHistory() {
     });
 }
 
-// Основной рендер
 function render() {
     const { current, operand, operator, error, lastExpression } = calc.toJSON();
 
@@ -164,9 +171,8 @@ function render() {
     renderHistory();
 }
 
-// Вешаем обработчики на кнопки
 function hookButtons() {
-    // Цифры
+    // Digits
     document.querySelectorAll("[data-digit]").forEach((btn) => {
         btn.addEventListener("click", () => {
             calc.inputDigit(btn.dataset.digit);
@@ -174,7 +180,7 @@ function hookButtons() {
         });
     });
 
-    // Операторы
+    // Operators
     document.querySelectorAll("[data-operator]").forEach((btn) => {
         btn.addEventListener("click", () => {
             calc.chooseOperator(btn.dataset.operator);
@@ -182,7 +188,7 @@ function hookButtons() {
         });
     });
 
-    // Действия: equals, all-clear, clear, backspace
+    // Actions
     const equalsBtn = document.querySelector("[data-action='equals']");
     const acBtn = document.querySelector("[data-action='all-clear']");
     const cBtn = document.querySelector("[data-action='clear']");
@@ -225,6 +231,35 @@ function hookButtons() {
     }
 }
 
-// Инициализация
+// Keyboard support
+window.addEventListener("keydown", (event) => {
+    const { key } = event;
+
+    if (/\d/.test(key)) {
+        calc.inputDigit(key);
+        render();
+    } else if (key === ".") {
+        calc.inputDot();
+        render();
+    } else if (["+", "-", "*", "/"].includes(key)) {
+        event.preventDefault();
+        calc.chooseOperator(key);
+        render();
+    } else if (key === "Enter" || key === "=") {
+        event.preventDefault();
+        calc.evaluate();
+        render();
+    } else if (key === "Backspace") {
+        event.preventDefault();
+        calc.backspace();
+        render();
+    } else if (key === "Escape") {
+        event.preventDefault();
+        calc.allClear();
+        render();
+    }
+});
+
+// Init
 hookButtons();
 render();
