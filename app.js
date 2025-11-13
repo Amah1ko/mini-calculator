@@ -13,7 +13,7 @@ function createCalculator() {
         operator: null,
         error: null,
         lastExpression: "",
-        history: [], // will be implemented later
+        history: [], // history будет использоваться позже
 
         inputDigit(d) {
             if (this.error) this.error = null;
@@ -125,4 +125,106 @@ function createCalculator() {
     };
 }
 
-console.log("Calculator core loaded");
+// ---------- UI LAYER (новая часть) ----------
+
+// Находим элементы
+const displayEl = document.getElementById("display");
+const expressionEl = document.getElementById("expression");
+const errorEl = document.getElementById("error");
+const historyListEl = document.getElementById("history-list");
+
+// Создаем экземпляр калькулятора
+const calc = createCalculator();
+
+// Рендер истории (пока просто очищаем, позже заполним)
+function renderHistory() {
+    historyListEl.innerHTML = "";
+    calc.history.forEach((item) => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        historyListEl.appendChild(li);
+    });
+}
+
+// Основной рендер
+function render() {
+    const { current, operand, operator, error, lastExpression } = calc.toJSON();
+
+    let exprText = "";
+    if (operand !== null && operator) {
+        exprText = `${operand} ${operator} ${current === "0" ? "" : current}`;
+    } else if (lastExpression) {
+        exprText = lastExpression;
+    }
+
+    displayEl.textContent = current;
+    expressionEl.textContent = exprText;
+    errorEl.textContent = error || "";
+
+    renderHistory();
+}
+
+// Вешаем обработчики на кнопки
+function hookButtons() {
+    // Цифры
+    document.querySelectorAll("[data-digit]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+            calc.inputDigit(btn.dataset.digit);
+            render();
+        });
+    });
+
+    // Операторы
+    document.querySelectorAll("[data-operator]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+            calc.chooseOperator(btn.dataset.operator);
+            render();
+        });
+    });
+
+    // Действия: equals, all-clear, clear, backspace
+    const equalsBtn = document.querySelector("[data-action='equals']");
+    const acBtn = document.querySelector("[data-action='all-clear']");
+    const cBtn = document.querySelector("[data-action='clear']");
+    const backspaceBtn = document.querySelector("[data-action='backspace']");
+    const dotBtn = document.querySelector("[data-dot]");
+
+    if (equalsBtn) {
+        equalsBtn.addEventListener("click", () => {
+            calc.evaluate();
+            render();
+        });
+    }
+
+    if (acBtn) {
+        acBtn.addEventListener("click", () => {
+            calc.allClear();
+            render();
+        });
+    }
+
+    if (cBtn) {
+        cBtn.addEventListener("click", () => {
+            calc.clear();
+            render();
+        });
+    }
+
+    if (backspaceBtn) {
+        backspaceBtn.addEventListener("click", () => {
+            calc.backspace();
+            render();
+        });
+    }
+
+    if (dotBtn) {
+        dotBtn.addEventListener("click", () => {
+            calc.inputDot();
+            render();
+        });
+    }
+}
+
+// Инициализация
+hookButtons();
+render();
