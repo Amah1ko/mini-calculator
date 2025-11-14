@@ -8,8 +8,14 @@
 </head>
 <body>
     <main class="calculator-app" role="application" aria-label="Calculator">
-        <h1>Calculator</h1>
-
+        <header class="calculator-header">
+            <h1>Calculator</h1>
+            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+                <span class="theme-icon">🌗</span>
+                <span class="theme-text">Theme</span>
+            </button>
+        </header>
+        
         <!-- Display area -->
         <section class="display-area">
             <div id="expression"
@@ -69,6 +75,6 @@
         </section>
     </main>
 
-    <script src="app.js" defer></script>
+    <script src="app.js"></script>
 </body>
 </html>

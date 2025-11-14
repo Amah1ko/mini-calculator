@@ -263,3 +263,10 @@ window.addEventListener("keydown", (event) => {
 // Init
 hookButtons();
 render();
+
+// Theme toggle
+const themeBtn = document.getElementById("theme-toggle");
+
+themeBtn.addEventListener("click", () => {
+    document.body.classList.toggle("dark");
+});

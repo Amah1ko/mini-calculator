@@ -1,103 +1,226 @@
+:root {
+    --bg-color: #f5f5f5;
+    --calc-bg: #ffffff;
+    --text-color: #333333;
+    --display-bg: #f8f9fa;
+    --btn-bg: #e9ecef;
+    --btn-hover: #d8d8d8;
+    --operator-bg: #ff9500;
+    --operator-hover: #e08500;
+    --operator-text: #ffffff;
+    --action-bg: #a6a6a6;
+    --action-hover: #8a8a8a;
+    --action-text: #ffffff;
+    --history-bg: #f0f0f0;
+    --border-color: #dddddd;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dark {
+    --bg-color: #121212;
+    --calc-bg: #1e1e1e;
+    --text-color: #e0e0e0;
+    --display-bg: #2d2d2d;
+    --btn-bg: #333333;
+    --btn-hover: #444444;
+    --operator-bg: #ff9500;
+    --operator-hover: #e08500;
+    --operator-text: #ffffff;
+    --action-bg: #616161;
+    --action-hover: #757575;
+    --action-text: #ffffff;
+    --history-bg: #2a2a2a;
+    --border-color: #444444;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
 * {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background: #f3f3f3;
-    padding: 20px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
+    min-height: 100vh;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .calculator-app {
-    background: white;
-    padding: 20px;
+    background-color: var(--calc-bg);
     border-radius: 12px;
+    box-shadow: var(--shadow);
     width: 320px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: background-color 0.3s;
+}
+
+.calculator-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.calculator-header h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.theme-toggle {
+    background: var(--btn-bg);
+    border: none;
+    border-radius: 20px;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    color: var(--text-color);
+    transition: background-color 0.2s;
+}
+
+.theme-toggle:hover {
+    background: var(--btn-hover);
+}
+
+.theme-icon {
+    font-size: 1.2rem;
+}
+
+.theme-text {
+    font-size: 0.9rem;
 }
 
 .display-area {
-    background: #111;
-    color: #0f0;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    min-height: 80px;
+    padding: 16px;
+    background-color: var(--display-bg);
+    text-align: right;
+    border-bottom: 1px solid var(--border-color);
 }
 
-#expression {
-    font-size: 14px;
-    opacity: 0.8;
+.expression {
+    font-size: 0.9rem;
+    min-height: 20px;
+    color: #666;
+    margin-bottom: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-#display {
-    font-size: 32px;
-    margin-top: 10px;
+.dark .expression {
+    color: #aaa;
+}
+
+.display {
+    font-size: 2rem;
+    font-weight: 500;
+    min-height: 40px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .error {
-    color: #ff6060;
-    font-size: 14px;
-    height: 18px;
+    color: #d32f2f;
+    font-size: 0.9rem;
+    min-height: 20px;
+    margin-top: 8px;
 }
 
 .keypad {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
+    gap: 8px;
+    padding: 16px;
 }
 
-button {
-    padding: 18px;
-    font-size: 18px;
+.keypad button {
     border: none;
-    background: #e0e0e0;
-    border-radius: 6px;
+    border-radius: 8px;
+    height: 60px;
+    font-size: 1.2rem;
     cursor: pointer;
-    transition: 0.2s;
+    transition: background-color 0.2s, transform 0.1s;
+    background-color: var(--btn-bg);
+    color: var(--text-color);
 }
 
-button:hover {
-    background: #d3d3d3;
+.keypad button:active {
+    transform: scale(0.95);
 }
 
-button:active {
-    background: #bcbcbc;
+.keypad button:hover {
+    background-color: var(--btn-hover);
 }
 
-[data-operator] {
-    background: #ffd36b;
+.keypad button[data-operator] {
+    background-color: var(--operator-bg);
+    color: var(--operator-text);
 }
 
-[data-operator]:hover {
-    background: #ffc94d;
+.keypad button[data-operator]:hover {
+    background-color: var(--operator-hover);
 }
 
-[data-action="equals"] {
-    background: #6de26a;
+.keypad button[data-action] {
+    background-color: var(--action-bg);
+    color: var(--action-text);
 }
 
-[data-action="all-clear"] {
-    background: #ff7e7e;
+.keypad button[data-action]:hover {
+    background-color: var(--action-hover);
 }
 
-[data-action="clear"] {
-    background: #ffa87e;
+.keypad button[data-action="equals"] {
+    background-color: var(--operator-bg);
+    color: var(--operator-text);
 }
 
-[data-action="backspace"] {
-    background: #9fb1ff;
+.keypad button[data-action="equals"]:hover {
+    background-color: var(--operator-hover);
 }
 
 .history {
-    margin-top: 20px;
+    padding: 16px;
+    border-top: 1px solid var(--border-color);
+    background-color: var(--history-bg);
+    max-height: 200px;
+    overflow-y: auto;
 }
 
-#history-list {
-    padding-left: 20px;
-    max-height: 150px;
-    overflow-y: auto;
+.history h2 {
+    font-size: 1rem;
+    margin-bottom: 12px;
+    color: var(--text-color);
+}
+
+.history ol {
+    list-style-type: none;
+}
+
+.history li {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.9rem;
+}
+
+.history li:last-child {
+    border-bottom: none;
+}
+
+@media (max-width: 350px) {
+    .calculator-app {
+        width: 95%;
+    }
+    
+    .keypad button {
+        height: 50px;
+        font-size: 1rem;
+    }
 }
