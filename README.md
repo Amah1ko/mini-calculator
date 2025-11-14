@@ -2,7 +2,8 @@
 
 A modern, responsive calculator web application with advanced mathematical functions, theme switching, and calculation history.
 
-![Calculator Screenshot](C:\Users\alimzhan.kamiev\Downloads\mini-calculator\images\2025-11-14_11-02-47.png)
+![Calculator Screenshot]<img width="620" height="883" alt="2025-11-14_11-02-47" src="https://github.com/user-attachments/assets/b303275e-456d-40e7-a23d-c202ff5ccf6f" />
+
 
 ## 🌐 Live Demo
 [View on GitHub Pages](https://amah1ko.github.io/mini-calculator/)
