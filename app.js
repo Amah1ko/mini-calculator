@@ -10,7 +10,8 @@ const ops = {
     "+": (a, b) => a + b,
     "-": (a, b) => a - b,
     "*": (a, b) => a * b,
-    "/": (a, b) => (b === 0 ? NaN : a / b)
+    "/": (a, b) => (b === 0 ? NaN : a / b),
+    "^": (a, b) => Math.pow(a, b)
 };
 
 function createCalculator() {
@@ -68,7 +69,8 @@ function createCalculator() {
             const result = this._compute(a, b, op);
             if (result === null) return;
 
-            const expression = `${a} ${op} ${b}`;
+            const displayOp = op === '*' ? '×' : op === '/' ? '÷' : op;
+            const expression = `${a} ${displayOp} ${b}`;
 
             this.lastExpression = expression;
             addToHistory(this, expression, result);
@@ -87,6 +89,24 @@ function createCalculator() {
             this.current = String(value / 100);
         },
 
+        power() {
+            if (this.error) this.error = null;
+
+            const value = parseFloat(this.current);
+            if (!Number.isFinite(value)) return;
+
+            if (this.operand === null) {
+                this.operand = value;
+            } else if (this.operator !== null) {
+                const result = this._compute(this.operand, value, this.operator);
+                if (result === null) return;
+                this.operand = result;
+            }
+
+            this.operator = "^";
+            this.current = "0";
+        },
+
         _compute(a, b, op) {
             const fn = ops[op];
             if (!fn) {
@@ -98,6 +118,18 @@ function createCalculator() {
             if (Number.isNaN(result)) {
                 this.error = "Cannot divide by zero";
                 return null;
+            }
+
+            // Check for power operation errors
+            if (op === "^") {
+                if (a < 0 && !Number.isInteger(b)) {
+                    this.error = "Negative base with fractional exponent";
+                    return null;
+                }
+                if (!Number.isFinite(result)) {
+                    this.error = "Result too large";
+                    return null;
+                }
             }
 
             return result;
@@ -168,7 +200,10 @@ function render() {
 
     let exprText = "";
     if (operand !== null && operator) {
-        exprText = `${operand} ${operator} ${current === "0" ? "" : current}`;
+        const displayOperator = operator === '*' ? '×' : 
+                              operator === '/' ? '÷' : 
+                              operator === '^' ? '^' : operator;
+        exprText = `${operand} ${displayOperator} ${current === "0" ? "" : current}`;
     } else if (lastExpression) {
         exprText = lastExpression;
     }
@@ -203,6 +238,7 @@ function hookButtons() {
     const cBtn = document.querySelector("[data-action='clear']");
     const backspaceBtn = document.querySelector("[data-action='backspace']");
     const percentBtn = document.querySelector("[data-action='percent']");
+    const powerBtn = document.querySelector("[data-action='power']");
     const dotBtn = document.querySelector("[data-dot]");
 
     if (equalsBtn) {
@@ -236,6 +272,13 @@ function hookButtons() {
     if (percentBtn) {
         percentBtn.addEventListener("click", () => {
             calc.percent();
+            render();
+        });
+    }
+
+    if (powerBtn) {
+        powerBtn.addEventListener("click", () => {
+            calc.power();
             render();
         });
     }
@@ -277,6 +320,10 @@ window.addEventListener("keydown", (event) => {
     } else if (key === "%") {
         event.preventDefault();
         calc.percent();
+        render();
+    } else if (key === "^" || key === "p" || key === "P") {
+        event.preventDefault();
+        calc.power();
         render();
     }
 });

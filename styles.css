@@ -11,6 +11,9 @@
     --action-bg: #a6a6a6;
     --action-hover: #8a8a8a;
     --action-text: #ffffff;
+    --power-bg: #34c759;
+    --power-hover: #30b453;
+    --power-text: #ffffff;
     --history-bg: #f0f0f0;
     --border-color: #dddddd;
     --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -29,6 +32,9 @@
     --action-bg: #616161;
     --action-hover: #757575;
     --action-text: #ffffff;
+    --power-bg: #30d158;
+    --power-hover: #28c54e;
+    --power-text: #ffffff;
     --history-bg: #2a2a2a;
     --border-color: #444444;
     --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
@@ -186,6 +192,25 @@ body {
     background-color: var(--operator-hover);
 }
 
+.keypad button[data-action="percent"] {
+    background-color: var(--action-bg);
+    color: var(--action-text);
+}
+
+.keypad button[data-action="percent"]:hover {
+    background-color: var(--action-hover);
+}
+
+.keypad button[data-action="power"] {
+    background-color: var(--power-bg);
+    color: var(--power-text);
+    font-size: 1.1rem;
+}
+
+.keypad button[data-action="power"]:hover {
+    background-color: var(--power-hover);
+}
+
 .history {
     padding: 16px;
     border-top: 1px solid var(--border-color);
@@ -223,12 +248,8 @@ body {
         height: 50px;
         font-size: 1rem;
     }
-}
-.keypad button[data-action="percent"] {
-    background-color: var(--action-bg);
-    color: var(--action-text);
-}
-
-.keypad button[data-action="percent"]:hover {
-    background-color: var(--action-hover);
+    
+    .keypad button[data-action="power"] {
+        font-size: 0.9rem;
+    }
 }
