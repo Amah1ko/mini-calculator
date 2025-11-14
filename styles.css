@@ -1,1 +1,103 @@
-/* Styles will be added in a later commit */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f3f3f3;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.calculator-app {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    width: 320px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.display-area {
+    background: #111;
+    color: #0f0;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    min-height: 80px;
+}
+
+#expression {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+#display {
+    font-size: 32px;
+    margin-top: 10px;
+}
+
+.error {
+    color: #ff6060;
+    font-size: 14px;
+    height: 18px;
+}
+
+.keypad {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+button {
+    padding: 18px;
+    font-size: 18px;
+    border: none;
+    background: #e0e0e0;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover {
+    background: #d3d3d3;
+}
+
+button:active {
+    background: #bcbcbc;
+}
+
+[data-operator] {
+    background: #ffd36b;
+}
+
+[data-operator]:hover {
+    background: #ffc94d;
+}
+
+[data-action="equals"] {
+    background: #6de26a;
+}
+
+[data-action="all-clear"] {
+    background: #ff7e7e;
+}
+
+[data-action="clear"] {
+    background: #ffa87e;
+}
+
+[data-action="backspace"] {
+    background: #9fb1ff;
+}
+
+.history {
+    margin-top: 20px;
+}
+
+#history-list {
+    padding-left: 20px;
+    max-height: 150px;
+    overflow-y: auto;
+}
