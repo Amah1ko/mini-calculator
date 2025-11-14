@@ -78,6 +78,15 @@ function createCalculator() {
             this.operator = null;
         },
 
+        percent() {
+            if (this.error) this.error = null;
+            
+            const value = parseFloat(this.current);
+            if (!Number.isFinite(value)) return;
+            
+            this.current = String(value / 100);
+        },
+
         _compute(a, b, op) {
             const fn = ops[op];
             if (!fn) {
@@ -193,6 +202,7 @@ function hookButtons() {
     const acBtn = document.querySelector("[data-action='all-clear']");
     const cBtn = document.querySelector("[data-action='clear']");
     const backspaceBtn = document.querySelector("[data-action='backspace']");
+    const percentBtn = document.querySelector("[data-action='percent']");
     const dotBtn = document.querySelector("[data-dot]");
 
     if (equalsBtn) {
@@ -219,6 +229,13 @@ function hookButtons() {
     if (backspaceBtn) {
         backspaceBtn.addEventListener("click", () => {
             calc.backspace();
+            render();
+        });
+    }
+
+    if (percentBtn) {
+        percentBtn.addEventListener("click", () => {
+            calc.percent();
             render();
         });
     }
@@ -256,6 +273,10 @@ window.addEventListener("keydown", (event) => {
     } else if (key === "Escape") {
         event.preventDefault();
         calc.allClear();
+        render();
+    } else if (key === "%") {
+        event.preventDefault();
+        calc.percent();
         render();
     }
 });

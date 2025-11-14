@@ -224,3 +224,11 @@ body {
         font-size: 1rem;
     }
 }
+.keypad button[data-action="percent"] {
+    background-color: var(--action-bg);
+    color: var(--action-text);
+}
+
+.keypad button[data-action="percent"]:hover {
+    background-color: var(--action-hover);
+}
